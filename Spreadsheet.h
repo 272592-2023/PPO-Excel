@@ -29,6 +29,15 @@ class Spreadsheet {
 
         string getCellType (int row, int col) const;
 
+        float Sum (int rowmin, int rowmax, int colmin, int colmax) const;
+        float Average (int rowmin, int rowmax, int colmin, int colmax) const;
+        float Max (int rowmin, int rowmax, int colmin, int colmax) const;
+        float Min (int rowmin, int rowmax, int colmin, int colmax) const;
+        string Concat (int rowmin, int rowmax, int colmin, int colmax) const;
+
+        void Save (string filename) const;
+        void Load (string filename);
+
         ~Spreadsheet ();
 
 };

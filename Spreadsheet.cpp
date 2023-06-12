@@ -102,7 +102,7 @@ float Spreadsheet::Sum(int rowmin, int rowmax, int colmin, int colmax) const {
     float sum = 0.0f;
     for (int i=rowmin; i<=rowmax; i++) {
         for (int j=colmin; j<=colmax; j++) {
-            sum += cells.getValueAsFloat(i, j);
+            sum += getValueAsFloat(i, j);
         }
     }
     return sum;
@@ -113,7 +113,7 @@ float Spreadsheet::Average(int rowmin, int rowmax, int colmin, int colmax) const
     int count = 0;
     for (int i=rowmin; i<=rowmax; i++) {
         for (int j=colmin; j<=colmax; j++) {
-            sum += cells.getValueAsFloat(i, j);
+            sum += getValueAsFloat(i, j);
             count++;
         }
     }
@@ -121,13 +121,13 @@ float Spreadsheet::Average(int rowmin, int rowmax, int colmin, int colmax) const
 }
 
 float Spreadsheet::Max(int rowmin, int rowmax, int colmin, int colmax) const {
-    float max = cells.getValueAsFloat(rowmin, colmin);
+    float max = getValueAsFloat(rowmin, colmin);
     rowmin++;
     colmin++;
     for (int i=rowmin; i<=rowmax; i++) {
         for (int j=colmin; j<=colmax; j++) {
-            if (cells.getValueAsFloat(i, j) > max) {
-                max = cells.getValueAsFloat(i, j);
+            if (getValueAsFloat(i, j) > max) {
+                max = getValueAsFloat(i, j);
             }
         }
     }
@@ -135,13 +135,13 @@ float Spreadsheet::Max(int rowmin, int rowmax, int colmin, int colmax) const {
 }
 
 float Spreadsheet::Min(int rowmin, int rowmax, int colmin, int colmax) const {
-    float min = cells.getValueAsFloat(rowmin, colmin);
+    float min = getValueAsFloat(rowmin, colmin);
     rowmin++;
     colmin++;
     for (int i=rowmin; i<=rowmax; i++) {
         for (int j=colmin; j<=colmax; j++) {
-            if (cells.getValueAsFloat(i, j) < min) {
-                min = cells.getValueAsFloat(i, j);
+            if (getValueAsFloat(i, j) < min) {
+                min = getValueAsFloat(i, j);
             }
         }
     }
@@ -152,7 +152,7 @@ string Spreadsheet::Concat (int rowmin, int rowmax, int colmin, int colmax) cons
     string concat = "";
     for (int i=rowmin; i<=rowmax; i++) {
         for (int j=colmin; j<=colmax; j++) {
-            concat += cells.getValueAsString(i, j);
+            concat += getValueAsString(i, j);
         }
     }
     return concat;
@@ -165,7 +165,7 @@ void Spreadsheet::Save (string filename) const {
 
     for (int i=0; i<cells.size(); i++) {
         for (int j=0; j<cells[i].size(); j++) {
-            file << i << ";" << j << ";" << cells.getCellType << ";" << cells.getValueAsString(i, j) << ";" << endl;
+            file << i << ";" << j << ";" << getCellType(i,j) << ";" << getValueAsString(i, j) << ";" << endl;
         }
     }
     file.close();
@@ -173,8 +173,10 @@ void Spreadsheet::Save (string filename) const {
 }
 
 void Spreadsheet::Load (string filename) {
+
     ifstream file;
     file.open(filename);
+
     string line;
     getline(file, line);
     int rows = stoi(line.substr(0, line.find(";")));
@@ -190,7 +192,7 @@ void Spreadsheet::Load (string filename) {
         line = line.substr(line.find(";") + 1, line.length());
         string type = line.substr(0, line.find(";"));
         line = line.substr(line.find(";") + 1, line.length());
-        string value = line.substr(0, line.find(";"));//to poprawic 
+        string value = line.substr(0, line.find(";"));
         if (type == "NumericCell") {
             cells[row][col] = new NumericCell();
         } else {
